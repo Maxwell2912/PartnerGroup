@@ -7,6 +7,7 @@ namespace PartnerGroup.Aplicacao.Interfaces
     public interface IPatrimonioRepositorio
     {
         List<Patrimonio> Obtenha();
+        List<Patrimonio> ObtenhaPorMarca(Guid marcaId);
         Patrimonio Obtenha(Guid id);
         Patrimonio Atualize(Patrimonio patrimonio);
         Patrimonio Salve(Patrimonio patrimonio);

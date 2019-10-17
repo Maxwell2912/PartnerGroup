@@ -11,5 +11,6 @@ namespace PartnerGroup.Aplicacao.Interfaces
         Marca Atualize(Marca marca);
         Marca Salve(Marca marca);
         bool Delete(Guid id);
+        bool MarcaCadastrada(Marca marca);
     }
 }

@@ -34,6 +34,11 @@ namespace PartnerGroup.Aplicacao.Servicos
             return _patrimonioRepositorio.Obtenha(id);
         }
 
+        public List<Patrimonio> ObtenhaPorMarca(Guid marcaId)
+        {
+            return _patrimonioRepositorio.ObtenhaPorMarca(marcaId);
+        }
+
         public Patrimonio Salve(Patrimonio patrimonio)
         {
             return _patrimonioRepositorio.Salve(patrimonio);

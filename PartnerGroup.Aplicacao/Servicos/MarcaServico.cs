@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using PartnerGroup.Aplicacao.Interfaces;
+﻿using PartnerGroup.Aplicacao.Interfaces;
 using PartnerGroup.Dominio;
+using System;
+using System.Collections.Generic;
 
 namespace PartnerGroup.Aplicacao.Servicos
 {
@@ -15,7 +15,16 @@ namespace PartnerGroup.Aplicacao.Servicos
         }
         public Marca Atualize(Marca marca)
         {
-            return _marcaRepositorio.Atualize(marca);
+            try
+            {
+                if (_marcaRepositorio.MarcaCadastrada(marca))
+                    throw new Exception("Marca já cadastrada");
+                return _marcaRepositorio.Atualize(marca);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public bool Delete(Guid id)
@@ -35,7 +44,16 @@ namespace PartnerGroup.Aplicacao.Servicos
 
         public Marca Salve(Marca marca)
         {
-            return _marcaRepositorio.Salve(marca);
+            try
+            {
+                if (_marcaRepositorio.MarcaCadastrada(marca))
+                    throw new Exception("Marca já cadastrada");
+                return _marcaRepositorio.Salve(marca);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -11,40 +11,60 @@ namespace PartnerGroup.Api.Controllers
     public class MarcaController : ControllerBase
     {
         private readonly IMarcaServico _marcaServico;
+        private readonly IPatrimonioServico _patrimonioServico;
 
-        public MarcaController(IMarcaServico marcaServico)
+        public MarcaController(IMarcaServico marcaServico, IPatrimonioServico patrimonioServico)
         {
             _marcaServico = marcaServico;
+            _patrimonioServico = patrimonioServico;
         }
-        // GET api/values
+
         [HttpGet]
         public ActionResult<IEnumerable<Marca>> Get()
         {
             return _marcaServico.Obtenha();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<Marca> Get(Guid id)
         {
             return _marcaServico.Obtenha(id);
         }
 
-        // POST api/values
+        [HttpGet("{id}/Patrimonios")]
+        public ActionResult<IEnumerable<Patrimonio>> GetPatrimonios(Guid id)
+        {
+            return _patrimonioServico.ObtenhaPorMarca(id);
+        }
+
         [HttpPost]
-        public void Post([FromBody] Marca value)
+        public ActionResult Post([FromBody] Marca value)
         {
-            _marcaServico.Salve(value);
+            try
+            {
+                _marcaServico.Salve(value);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Marca value)
+        public ActionResult Put([FromBody] Marca value)
         {
-            _marcaServico.Atualize(value);
+            try
+            {
+                _marcaServico.Atualize(value);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {

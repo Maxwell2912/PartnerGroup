@@ -1,19 +1,26 @@
-﻿using PartnerGroup.Aplicacao.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using PartnerGroup.Aplicacao.Interfaces;
 using PartnerGroup.Dominio;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Text;
 
 namespace PartnerGroup.Persistencia.Repositorios
 {
     public class MarcaRepositorio : IMarcaRepositorio
     {
-        private readonly string stringConexao = "";
+        private readonly string _stringConexao;
+
+        public MarcaRepositorio(IConfiguration configuracao)
+        {
+            _stringConexao = configuracao.GetConnectionString("DefaultConnection");
+        }
 
         public Marca Atualize(Marca marca)
         {
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
             {
                 connection.Open();
                 StringBuilder sb = new StringBuilder();
@@ -34,7 +41,7 @@ namespace PartnerGroup.Persistencia.Repositorios
 
         public bool Delete(Guid id)
         {
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
             {
                 connection.Open();
                 StringBuilder sb = new StringBuilder();
@@ -53,10 +60,38 @@ namespace PartnerGroup.Persistencia.Repositorios
             }
         }
 
+        public bool MarcaCadastrada(Marca marca)
+        {
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
+            {
+                connection.Open();
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT ID FROM MARCA ");
+                sb.Append(" WHERE ID <> @ID ");
+                sb.Append(" AND NOME = @NOME");
+                string sql = sb.ToString();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@ID", marca.Id);
+                    command.Parameters.AddWithValue("@NOME", marca.Nome);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         public List<Marca> Obtenha()
         {
             var retorno = new List<Marca>();
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
             {
                 connection.Open();
                 StringBuilder sb = new StringBuilder();
@@ -80,7 +115,7 @@ namespace PartnerGroup.Persistencia.Repositorios
 
         public Marca Obtenha(Guid id)
         {
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
             {
                 connection.Open();
                 StringBuilder sb = new StringBuilder();
@@ -107,7 +142,7 @@ namespace PartnerGroup.Persistencia.Repositorios
 
         public Marca Salve(Marca marca)
         {
-            using (SqlConnection connection = new SqlConnection(stringConexao))
+            using (SqlConnection connection = new SqlConnection(_stringConexao))
             {
                 connection.Open();
                 StringBuilder sb = new StringBuilder();

@@ -7,7 +7,7 @@ namespace PartnerGroup.Dominio
         public string Nome { get; set; }
         public Guid MarcaId { get; set; }
         public string Descricao { get; set; }
-        public long NumeroTombo { get; set; }
+        public int NumeroTombo { get; set; }
         public Guid Id { get; set; }
     }
 }
